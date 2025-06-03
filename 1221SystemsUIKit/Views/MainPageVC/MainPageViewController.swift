@@ -10,55 +10,200 @@ import UIKit
 class MainPageViewController: UIViewController {
     internal var vm = MainPageViewModel()
     
-    var lblTest: UILabel = {
+    private var scrollView: UIScrollView = {
+        var scroll = UIScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        return scroll
+    }()
+    
+    private var contentView: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = .clear
+        return v
+    }()
+    
+    
+    internal var imgViewWeather: UIImageView = {
+        var imgView = UIImageView(frame: .zero)
+        imgView.translatesAutoresizingMaskIntoConstraints = false
+        imgView.contentMode = .scaleAspectFit
+        imgView.tintColor = .white
+        return imgView
+    }()
+    internal var lblTemperature: UILabel = {
         var lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.textColor = .white
+        lbl.font = UIFont.systemFont(ofSize: 64, weight: .semibold)
         return lbl
     }()
-    var btnTest: UIButton = {
-       var btn = UIButton()
-        btn.backgroundColor = .blue
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        btn.setTitle("press me", for: .normal)
-        return btn
+    
+    internal var lblWeatherText: UILabel = {
+        var lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.textColor = .white
+        lbl.text = "Its Fucking Sunny In Saint Petersburg"
+        lbl.numberOfLines = 0
+        lbl.font = UIFont.systemFont(ofSize: 64, weight: .semibold)
+        return lbl
     }()
+    
+   private var separator: UIView = {
+        let v = UIView()
+        v.backgroundColor = .white
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+        
+    }()
+    private var lblScroll: UILabel = {
+        let lbl = UILabel()
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        lbl.text = "scroll down to see future"
+        lbl.textColor = .systemGray2
+        return lbl
+    }()
+    
+    
+    internal var hstack = UIStackView()
+    internal var windView = WeatherDetailView()
+    internal var humidityView = WeatherDetailView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        setupScroll()
         setupBindings()
-        setupLbl()
-        setupBtn()
-    }
-    
-    private func setupLbl() {
-        view.addSubview(lblTest)
-        lblTest.text = vm.text
-        NSLayoutConstraint.activate([
-            lblTest.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            lblTest.heightAnchor.constraint(equalToConstant: 20),
-            lblTest.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            lblTest.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-        ])
-    }
-    
-    private func setupBtn() {
-        view.addSubview(btnTest)
+        setupImgViewWeather()
+        setupTemperatureLbl()
+        setupWeatherText()
+        setupWeatherInfo()
+        setupSeparator()
+        setupScrollLbl()
         
-        btnTest.addTarget(self, action: #selector(btnPressed), for: .touchUpInside)
+    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        lblWeatherText.sizeToFit()
+    }
+    private func setupWeatherText() {
+        contentView.addSubview(lblWeatherText)
+        setupWeatherTextConstraints()
+        
+    }
+    
+    private func setupTemperatureLbl() {
+        contentView.addSubview(lblTemperature)
+        lblTemperature.text = "15°C"
+        setupTemperatureLblConstarains()
+    }
+    
+    private func setupImgViewWeather() {
+        contentView.addSubview(imgViewWeather)
+        imgViewWeather.image = UIImage(systemName: "cloud.drizzle")
+        setupWeatherImgViewConstrains()
+        
+    }
+    
+    private func setupWeatherInfo() {
+        windView.configure(systemImage: "wind", title: "10km.h")
+        humidityView.configure(systemImage: "humidity", title: "20%")
+        contentView.addSubview(hstack)
+        hstack.translatesAutoresizingMaskIntoConstraints = false
+        hstack.addArrangedSubview(windView)
+        hstack.addArrangedSubview(humidityView)
+        hstack.axis = .horizontal
+        hstack.alignment = .center
+        hstack.distribution = .fill
+        hstack.spacing = 8
+        setupWeatherInfoConstraints()
+    }
+    
+    private func setupSeparator() {
+        contentView.addSubview(separator)
+        setupSeparatorConstraints()
+    }
+    
+    private func setupScroll() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        setupScrollConstraints()
+    }
+    
+    private func setupScrollLbl() {
+        contentView.addSubview(lblScroll)
+        setupScrollLblConstraints()
+    }
+    
+    
+
+    
+    //MARK: setup constraints
+    private func setupWeatherImgViewConstrains() {
         NSLayoutConstraint.activate([
-            btnTest.topAnchor.constraint(equalTo: lblTest.bottomAnchor, constant: 10),
-            btnTest.heightAnchor.constraint(equalToConstant: 40),
-            btnTest.leadingAnchor.constraint(equalTo: lblTest.leadingAnchor),
-            btnTest.trailingAnchor.constraint(equalTo: lblTest.trailingAnchor)
+            imgViewWeather.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            imgViewWeather.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            imgViewWeather.heightAnchor.constraint(equalToConstant: 76),
+            imgViewWeather.widthAnchor.constraint(equalToConstant: 76)
+        ])
+    }
+    private func setupTemperatureLblConstarains() {
+        NSLayoutConstraint.activate([
+            lblTemperature.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            lblTemperature.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            lblTemperature.heightAnchor.constraint(lessThanOrEqualToConstant: 60),
+            lblTemperature.trailingAnchor.constraint(equalTo: imgViewWeather.leadingAnchor, constant: -10)
+        ])
+    }
+    private func setupWeatherTextConstraints() {
+        NSLayoutConstraint.activate([
+            lblWeatherText.topAnchor.constraint(equalTo: lblTemperature.bottomAnchor, constant: 10),
+            lblWeatherText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            lblWeatherText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            lblWeatherText.heightAnchor.constraint(lessThanOrEqualTo: contentView.heightAnchor, constant: 20)
+        ])
+    }
+    private func setupWeatherInfoConstraints() {
+        NSLayoutConstraint.activate([
+            hstack.topAnchor.constraint(equalTo: lblWeatherText.bottomAnchor, constant: 10),
+            hstack.leadingAnchor.constraint(equalTo: lblTemperature.leadingAnchor),
+            hstack.trailingAnchor.constraint(lessThanOrEqualTo: imgViewWeather.trailingAnchor),
+            hstack.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    private func setupSeparatorConstraints() {
+        NSLayoutConstraint.activate([
+            separator.topAnchor.constraint(equalTo: hstack.bottomAnchor, constant: 5),
+            separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            separator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            separator.heightAnchor.constraint(equalToConstant: 2)
+        ])
+    }
+    private func setupScrollLblConstraints() {
+        NSLayoutConstraint.activate([
+            lblScroll.topAnchor.constraint(equalTo: separator.bottomAnchor, constant: 5),
+            lblScroll.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            lblScroll.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 10),
+            lblScroll.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
     
-    @objc func btnPressed() {
-        print("kekekkeke")
-        vm.text = "gg"
+    private func setupScrollConstraints() {
+        let heightConstraint = contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 1.1)
+        heightConstraint.isActive = true
+        heightConstraint.priority = UILayoutPriority(50)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
     }
-
-
 }
 
