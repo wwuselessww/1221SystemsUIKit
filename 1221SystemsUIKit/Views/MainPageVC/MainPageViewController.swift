@@ -10,13 +10,31 @@ import UIKit
 class MainPageViewController: UIViewController {
     internal var vm = MainPageViewModel()
     
+    lazy var dataSource: UITableViewDiffableDataSource<Section, Weather> = {
+        return .init(tableView: table) { [self] tableView, indexPath, itemIdentifier in
+            guard let cell = table.dequeueReusableCell(withIdentifier: "cell") else {
+                print("***cant deque cell for table in mainPageVC")
+                return UITableViewCell()
+            }
+            cell.backgroundColor = .systemMint
+            return cell
+        }
+    }()
+    
+    internal var table: UITableView = {
+        var t = UITableView(frame: .zero, style: .insetGrouped)
+        t.translatesAutoresizingMaskIntoConstraints = false
+        t.backgroundColor = .clear
+        return t
+    }()
+    
     private var scrollView: UIScrollView = {
         var scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
         return scroll
     }()
     
-    private var contentView: UIView = {
+    internal var contentView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = .clear
@@ -49,14 +67,14 @@ class MainPageViewController: UIViewController {
         return lbl
     }()
     
-   private var separator: UIView = {
+   internal var separator: UIView = {
         let v = UIView()
         v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
         
     }()
-    private var lblScroll: UILabel = {
+    internal var lblScroll: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
@@ -64,6 +82,8 @@ class MainPageViewController: UIViewController {
         lbl.textColor = .systemGray2
         return lbl
     }()
+    
+
     
     
     internal var hstack = UIStackView()
@@ -80,6 +100,8 @@ class MainPageViewController: UIViewController {
         setupWeatherInfo()
         setupSeparator()
         setupScrollLbl()
+        setupTable()
+        
         
     }
     override func viewDidLayoutSubviews() {
