@@ -9,7 +9,6 @@ import Foundation
 extension MainPageViewController {
     func setupBindings() {
         vm.$text.sink { [weak self] str in
-            self?.lblTest.text = str
         }
         .store(in: &vm.cancellables)
     }
