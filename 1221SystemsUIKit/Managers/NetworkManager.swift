@@ -19,8 +19,13 @@ class NetworkManager {
            case noData
        }
     
-    func fetchWeather(for city: String) async throws -> Weather {
-        guard let url = URL(string: "https://api.weatherapi.com/v1/forecast.json?q=\(city)&days=5&key=f58a65c2036242af819165330250206") else {
+    func fetchWeather(for city: String) async throws -> Weather? {
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "ApiKey") else {
+            print("no api key in infoPlist")
+            return nil
+        }
+        print("https://api.weatherapi.com/v1/forecast.json?q=\(city)&days=5&key=\(Bundle.main.object(forInfoDictionaryKey: "ApiKey"))")
+        guard let url = URL(string: "https://api.weatherapi.com/v1/forecast.json?q=\(city)&days=5&key=\(apiKey)") else {
             throw NetworkError.invalidURL
         }
         
