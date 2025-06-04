@@ -7,7 +7,9 @@
 
 import Foundation
 
-struct Weather: Hashable {
+struct WeatherModel: Hashable {
     var id = UUID()
     var name: String
 }
+
+
