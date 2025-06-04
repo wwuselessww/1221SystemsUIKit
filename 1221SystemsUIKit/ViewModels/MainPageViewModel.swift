@@ -15,7 +15,7 @@ class MainPageViewModel: ObservableObject {
     var windSpeedString: String = ""
     var humidityString: String = ""
     var conditionImageString: String = ""
-    
+    @Published var forecastArray: [Forecastday] = []
     var cancellables: Set<AnyCancellable> = []
     
     func getWeather() {
@@ -42,5 +42,14 @@ class MainPageViewModel: ObservableObject {
         }
         conditionImageString = "https:" + imageUrl
     }
-
+    
+    func populateCollectionView() {
+        guard let array = weatherObject?.forecast else {
+            print("error with data array")
+            return
+        }
+        
+        forecastArray = array.forecastday
+    }
+    
 }
