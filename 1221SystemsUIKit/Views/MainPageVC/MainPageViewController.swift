@@ -20,7 +20,6 @@ class MainPageViewController: UIViewController {
             guard let day = itemIdentifier.day, let date = itemIdentifier.date else {
                 return ForecastCell()
             }
-            cell.backgroundColor = .white
             cell.configure(weekday: date.formattedToString("MMM d"), temperature: Int(day.maxtempC ?? 0),humidity:day.avghumidity ?? 0, windSpeed: day.maxwindKph ?? 0, conditionText: day.condition?.text ?? "heh")
             
             return cell
@@ -37,6 +36,7 @@ class MainPageViewController: UIViewController {
     private var scrollView: UIScrollView = {
         var scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.backgroundColor = .clear
         return scroll
     }()
     
@@ -52,13 +52,13 @@ class MainPageViewController: UIViewController {
         var imgView = UIImageView(frame: .zero)
         imgView.translatesAutoresizingMaskIntoConstraints = false
         imgView.contentMode = .scaleAspectFit
-        imgView.tintColor = .white
+        imgView.tintColor = .label
         return imgView
     }()
     internal var lblTemperature: UILabel = {
         var lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.textColor = .white
+        lbl.textColor = .label
         lbl.font = UIFont.systemFont(ofSize: 64, weight: .semibold)
         return lbl
     }()
@@ -66,7 +66,7 @@ class MainPageViewController: UIViewController {
     internal var lblWeatherText: UILabel = {
         var lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.textColor = .white
+        lbl.textColor = .label
         lbl.text = "Its Fucking Sunny In Saint Petersburg"
         lbl.numberOfLines = 0
         lbl.font = UIFont.systemFont(ofSize: 64, weight: .semibold)
@@ -75,7 +75,7 @@ class MainPageViewController: UIViewController {
     
    internal var separator: UIView = {
         let v = UIView()
-        v.backgroundColor = .white
+       v.backgroundColor = .label
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
         
@@ -98,6 +98,7 @@ class MainPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         initialSnapshot()
         vm.getWeather()
         setupBindings()
@@ -136,8 +137,8 @@ class MainPageViewController: UIViewController {
     }
     
     private func setupWeatherInfo() {
-        windView.configure(systemImage: "wind", title: "10km.h", color: .white)
-        humidityView.configure(systemImage: "humidity", title: "20%", color: .white)
+        windView.configure(systemImage: "wind", title: "10km.h")
+        humidityView.configure(systemImage: "humidity", title: "20%")
         contentView.addSubview(hstack)
         hstack.translatesAutoresizingMaskIntoConstraints = false
         hstack.addArrangedSubview(windView)

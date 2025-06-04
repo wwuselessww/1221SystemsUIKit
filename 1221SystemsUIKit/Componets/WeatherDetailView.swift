@@ -11,7 +11,7 @@ class WeatherDetailView: UIView {
      var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.image = UIImage(systemName: "cloud.drizzle")
-//        imageView.tintColor = .white
+         imageView.tintColor = .label
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -19,7 +19,7 @@ class WeatherDetailView: UIView {
         var lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.font = UIFont.systemFont(ofSize: 20)
-//        lbl.textColor = .white
+         lbl.textColor = .label
         lbl.text = "10%"
         return lbl
     }()
@@ -31,7 +31,6 @@ class WeatherDetailView: UIView {
         return stack
     }()
     
-    private var color: UIColor = .white
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,8 +38,8 @@ class WeatherDetailView: UIView {
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        lbl.textColor = color
-        imageView.tintColor = color
+//        lbl.textColor = color
+//        imageView.tintColor = color
     }
     
     required init?(coder: NSCoder) {
@@ -48,8 +47,8 @@ class WeatherDetailView: UIView {
     }
     
     private func setupStackView() {
-        imageView.tintColor = color
-        lbl.textColor = color
+//        imageView.tintColor = color
+//        lbl.textColor = color
         hstack.addArrangedSubview(imageView)
         hstack.addArrangedSubview(lbl)
         self.addSubview(hstack)
@@ -66,10 +65,9 @@ class WeatherDetailView: UIView {
         ])
     }
     
-    func configure(systemImage: String, title: String, color: UIColor) {
+    func configure(systemImage: String, title: String) {
         imageView.image = UIImage(systemName: systemImage)
         lbl.text = title
-        self.color = color
     }
     
 }

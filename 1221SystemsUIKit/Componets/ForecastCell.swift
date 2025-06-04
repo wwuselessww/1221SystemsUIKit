@@ -14,7 +14,7 @@ class ForecastCell: UITableViewCell {
     var imageViewWeatherCondition: UIImageView = {
         let v = UIImageView()
         v.image = UIImage(systemName: "wind")
-        v.tintColor = .black
+        v.tintColor = .label
         v.contentMode = .scaleAspectFit
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -27,6 +27,7 @@ class ForecastCell: UITableViewCell {
         lbl.numberOfLines = 0
         lbl.font = UIFont.systemFont(ofSize: 12)
         lbl.textAlignment = .natural
+        lbl.textColor = .label
         return lbl
     }()
     
@@ -34,6 +35,7 @@ class ForecastCell: UITableViewCell {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.font = UIFont.systemFont(ofSize: 20)
+        lbl.textColor = .label
         return lbl
     }()
     
@@ -54,11 +56,13 @@ class ForecastCell: UITableViewCell {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.font = UIFont.systemFont(ofSize: 20)
+        lbl.textColor = .label
         return lbl
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.backgroundColor = UIColor.secondarySystemBackground
         setupWeatherLbl()
         setupWeatherImage()
         setupLblDay()
@@ -85,8 +89,8 @@ class ForecastCell: UITableViewCell {
     }
     
     private func setupHstack() {
-        humidityView.configure(systemImage: "humidity", title: "10", color: .black)
-        windSpeedView.configure(systemImage: "wind", title: "20", color: .black)
+        humidityView.configure(systemImage: "humidity", title: "10")
+        windSpeedView.configure(systemImage: "wind", title: "20")
         contentView.addSubview(hStack)
         setupHstackConstraints()
         hStack.addArrangedSubview(humidityView)
