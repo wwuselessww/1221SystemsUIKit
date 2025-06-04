@@ -32,7 +32,6 @@ class NetworkManager {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let result = try decoder.decode(Weather.self, from: data)
-        print(result)
         return result
     }
     

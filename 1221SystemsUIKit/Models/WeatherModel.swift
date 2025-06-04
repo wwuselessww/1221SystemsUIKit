@@ -20,7 +20,8 @@ struct Weather: Codable {
 }
 
 // MARK: - Current
-struct Current: Codable {
+struct Current: Codable, Hashable {
+    let id = UUID()
     let lastUpdatedEpoch: Int?
     let lastUpdated: String?
     let tempC, tempF: Double?
@@ -44,7 +45,7 @@ struct Current: Codable {
 }
 
 // MARK: - Condition
-struct Condition: Codable {
+struct Condition: Codable, Hashable {
     let text: String?
     let icon: String?
     let code: Int?
@@ -57,7 +58,8 @@ struct Forecast: Codable {
 }
 
 // MARK: - Forecastday
-struct Forecastday: Codable {
+struct Forecastday: Codable, Hashable {
+    let id = UUID()
     let date: String?
     let dateEpoch: Int?
     let day: Day?
@@ -66,14 +68,18 @@ struct Forecastday: Codable {
 }
 
 // MARK: - Astro
-struct Astro: Codable {
+struct Astro: Codable, Hashable {
     let sunrise, sunset, moonrise, moonset: String?
     let moonPhase: String?
     let moonIllumination, isMoonUp, isSunUp: Int?
 }
 
 // MARK: - Day
-struct Day: Codable {
+struct Day: Codable, Hashable {
+    static func == (lhs: Day, rhs: Day) -> Bool {
+        lhs.id == rhs.id
+    }
+    let id = UUID()
     let maxtempC, maxtempF, mintempC, mintempF: Double?
     let avgtempC, avgtempF, maxwindMph, maxwindKph: Double?
     let totalprecipMm, totalprecipIn: Double?

@@ -14,7 +14,7 @@ extension MainPageViewController: UITableViewDelegate{
         table.delegate = self
         registercells()
         setupTableConstraints()
-        initialSnapshot()
+        
         table.isScrollEnabled = false
 
     }
@@ -38,9 +38,17 @@ extension MainPageViewController: UITableViewDelegate{
     internal func initialSnapshot() {
         var snapshot = dataSource.snapshot()
         snapshot.appendSections([.date])
-        snapshot.appendItems([.init(name: "kek"),.init(name: "kek1"),.init(name: "kek2"), .init(name: "sss"), .init(name: "wwww"), .init(name: "wwww"), .init(name: "wwww"), .init(name: "wwww"), .init(name: "wwww")])
+        snapshot.appendItems(vm.forecastArray)
         dataSource.apply(snapshot)
     }
+    
+    func updateSnapshot() {
+        print("updated")
+        var snapshot = dataSource.snapshot()
+        snapshot.appendItems(self.vm.forecastArray)
+        dataSource.apply(snapshot)
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         60
     }

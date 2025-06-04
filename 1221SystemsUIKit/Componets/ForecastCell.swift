@@ -24,7 +24,9 @@ class ForecastCell: UITableViewCell {
         let lbl = UILabel()
         lbl.text = "Windy"
         lbl.translatesAutoresizingMaskIntoConstraints =  false
-        lbl.textAlignment = .center
+        lbl.numberOfLines = 0
+        lbl.font = UIFont.systemFont(ofSize: 12)
+        lbl.textAlignment = .natural
         return lbl
     }()
     
@@ -40,8 +42,8 @@ class ForecastCell: UITableViewCell {
         h.translatesAutoresizingMaskIntoConstraints = false
         h.axis = .horizontal
         h.spacing = 8
-        h.alignment = .center
-        h.distribution = .fill
+        h.alignment = .trailing
+        h.distribution = .equalSpacing
         return h
     }()
     
@@ -57,8 +59,8 @@ class ForecastCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupWeatherImage()
         setupWeatherLbl()
+        setupWeatherImage()
         setupLblDay()
         setupHstack()
         
@@ -69,9 +71,12 @@ class ForecastCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(weekday: String, temperature: Int) {
+    func configure(weekday: String, temperature: Int, humidity: Int, windSpeed: Double, conditionText: String) {
         lblDate.text = weekday
         lblTemperature.text = "\(temperature)°C"
+        windSpeedView.lbl.text = String(format: "%.0f", windSpeed)
+        humidityView.lbl.text = String(format: "%.0f", humidity)
+        lblViewWeatherCondition.text = conditionText
     }
     
     private func setupLblDay() {
@@ -103,37 +108,39 @@ class ForecastCell: UITableViewCell {
     
     private func setupLblDayConstraints() {
         NSLayoutConstraint.activate([
-            lblDate.topAnchor.constraint(equalTo: contentView.topAnchor),
-            lblDate.leadingAnchor.constraint(equalTo: lblViewWeatherCondition.trailingAnchor),
-            lblDate.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
+            lblDate.topAnchor.constraint(equalTo: lblViewWeatherCondition.bottomAnchor),
+            lblDate.leadingAnchor.constraint(equalTo: imageViewWeatherCondition.trailingAnchor, constant: 10),
+            lblDate.widthAnchor.constraint(greaterThanOrEqualToConstant: 50),
             lblDate.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
     
     private func setupHstackConstraints() {
         NSLayoutConstraint.activate([
-            hStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            hStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             hStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            hStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            hStack.leadingAnchor.constraint(equalTo: lblDate.trailingAnchor, constant: 10)
+            hStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            hStack.leadingAnchor.constraint(greaterThanOrEqualTo: lblDate.trailingAnchor, constant: 10)
         ])
     }
     
     private func setupWeatherImageConstraints() {
         NSLayoutConstraint.activate([
-            imageViewWeatherCondition.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageViewWeatherCondition.topAnchor.constraint(equalTo: lblViewWeatherCondition.bottomAnchor),
             imageViewWeatherCondition.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageViewWeatherCondition.heightAnchor.constraint(equalToConstant: 30),
-            imageViewWeatherCondition.widthAnchor.constraint(equalToConstant: 60)
+            imageViewWeatherCondition.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            imageViewWeatherCondition.widthAnchor.constraint(equalToConstant: 50)
+            
         ])
     }
     
     private func setupWeatherLblConstraints() {
         NSLayoutConstraint.activate([
-            lblViewWeatherCondition.topAnchor.constraint(equalTo: imageViewWeatherCondition.bottomAnchor, constant: 0),
-            lblViewWeatherCondition.leadingAnchor.constraint(equalTo: imageViewWeatherCondition.leadingAnchor, constant: -5),
-            lblViewWeatherCondition.trailingAnchor.constraint(equalTo: imageViewWeatherCondition.trailingAnchor, constant: 5),
-            lblViewWeatherCondition.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            lblViewWeatherCondition.topAnchor.constraint(equalTo: contentView.topAnchor),
+            lblViewWeatherCondition.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
+            lblViewWeatherCondition.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+//            lblViewWeatherCondition.bottomAnchor.constraint(equalTo: imageViewWeatherCondition.topAnchor)
+            lblViewWeatherCondition.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
