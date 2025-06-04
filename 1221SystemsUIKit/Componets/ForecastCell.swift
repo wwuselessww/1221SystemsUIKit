@@ -26,7 +26,7 @@ class ForecastCell: UITableViewCell {
         lbl.translatesAutoresizingMaskIntoConstraints =  false
         lbl.numberOfLines = 0
         lbl.font = UIFont.systemFont(ofSize: 12)
-        lbl.textAlignment = .center
+        lbl.textAlignment = .natural
         return lbl
     }()
     
@@ -59,8 +59,8 @@ class ForecastCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupWeatherImage()
         setupWeatherLbl()
+        setupWeatherImage()
         setupLblDay()
         setupHstack()
         
@@ -108,8 +108,8 @@ class ForecastCell: UITableViewCell {
     
     private func setupLblDayConstraints() {
         NSLayoutConstraint.activate([
-            lblDate.topAnchor.constraint(equalTo: contentView.topAnchor),
-            lblDate.leadingAnchor.constraint(equalTo: lblViewWeatherCondition.trailingAnchor, constant: 10),
+            lblDate.topAnchor.constraint(equalTo: lblViewWeatherCondition.bottomAnchor),
+            lblDate.leadingAnchor.constraint(equalTo: imageViewWeatherCondition.trailingAnchor, constant: 10),
             lblDate.widthAnchor.constraint(greaterThanOrEqualToConstant: 50),
             lblDate.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
@@ -119,27 +119,28 @@ class ForecastCell: UITableViewCell {
         NSLayoutConstraint.activate([
             hStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             hStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            hStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            hStack.leadingAnchor.constraint(equalTo: lblDate.trailingAnchor)
+            hStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            hStack.leadingAnchor.constraint(greaterThanOrEqualTo: lblDate.trailingAnchor, constant: 10)
         ])
     }
     
     private func setupWeatherImageConstraints() {
         NSLayoutConstraint.activate([
-            imageViewWeatherCondition.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageViewWeatherCondition.topAnchor.constraint(equalTo: lblViewWeatherCondition.bottomAnchor),
             imageViewWeatherCondition.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageViewWeatherCondition.heightAnchor.constraint(equalToConstant: 20),
+            imageViewWeatherCondition.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             imageViewWeatherCondition.widthAnchor.constraint(equalToConstant: 50)
+            
         ])
     }
     
     private func setupWeatherLblConstraints() {
         NSLayoutConstraint.activate([
-            lblViewWeatherCondition.topAnchor.constraint(equalTo: imageViewWeatherCondition.bottomAnchor),
+            lblViewWeatherCondition.topAnchor.constraint(equalTo: contentView.topAnchor),
             lblViewWeatherCondition.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-//            lblViewWeatherCondition.trailingAnchor.constraint(equalTo: imageViewWeatherCondition.trailingAnchor, constant: 5),
-            lblViewWeatherCondition.widthAnchor.constraint(equalToConstant: 50),
-            lblViewWeatherCondition.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            lblViewWeatherCondition.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+//            lblViewWeatherCondition.bottomAnchor.constraint(equalTo: imageViewWeatherCondition.topAnchor)
+            lblViewWeatherCondition.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
