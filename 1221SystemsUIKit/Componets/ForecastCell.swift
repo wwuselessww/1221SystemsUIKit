@@ -14,6 +14,7 @@ class ForecastCell: UITableViewCell {
     var imageViewWeatherCondition: UIImageView = {
         let v = UIImageView()
         v.image = UIImage(systemName: "wind")
+        v.tintColor = .black
         v.contentMode = .scaleAspectFit
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
