@@ -5,7 +5,7 @@
 //  Created by Alexander Kozharin on 03.06.25.
 //
 import Combine
-import Foundation
+import UIKit
 
 class MainPageViewModel: ObservableObject {
     var cityName: String = ""
@@ -14,6 +14,7 @@ class MainPageViewModel: ObservableObject {
     var temreratureString: String = ""
     var windSpeedString: String = ""
     var humidityString: String = ""
+    var conditionImageString: String = ""
     
     var cancellables: Set<AnyCancellable> = []
     
@@ -34,6 +35,12 @@ class MainPageViewModel: ObservableObject {
         temreratureString = String(format: "%.0f",weatherObject?.forecast?.forecastday[0].day?.avgtempC ?? 0)
         windSpeedString = String(format: "%.0f",weatherObject?.forecast?.forecastday[0].day?.maxwindKph ?? "no")
         humidityString = String(format: "%.0f",weatherObject?.forecast?.forecastday[0].day?.avghumidity ?? "no")
-        print(cityName)
+        
+        guard let imageUrl = weatherObject?.forecast?.forecastday[0].day?.condition?.icon else {
+            print("no image")
+            return
+        }
+        conditionImageString = "https:" + imageUrl
     }
+
 }

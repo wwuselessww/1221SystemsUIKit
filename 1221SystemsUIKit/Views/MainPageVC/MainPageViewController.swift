@@ -94,6 +94,7 @@ class MainPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        vm.getWeather()
         setupBindings()
         setupScroll()
         setupImgViewWeather()
@@ -103,7 +104,7 @@ class MainPageViewController: UIViewController {
         setupSeparator()
         setupScrollLbl()
         setupTable()
-        vm.getWeather()
+        
 
     }
     override func viewDidLayoutSubviews() {

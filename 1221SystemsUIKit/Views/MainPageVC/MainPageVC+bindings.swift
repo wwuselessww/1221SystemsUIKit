@@ -15,6 +15,7 @@ extension MainPageViewController {
                 self.lblTemperature.text = "\(self.vm.temreratureString)°C"
                 self.windView.lbl.text = "\(self.vm.windSpeedString)km/h"
                 self.humidityView.lbl.text = "\(self.vm.humidityString)%"
+                self.imgViewWeather.imageFrom(self.vm.conditionImageString)
                 
             }
         }
