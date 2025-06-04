@@ -75,12 +75,16 @@ class ForecastCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(weekday: String, temperature: Int, humidity: Int, windSpeed: Double, conditionText: String) {
+    func configure(weekday: String, temperature: Int, humidity: Int, windSpeed: Double, conditionText: String, conditionImgURLString: String) {
         lblDate.text = weekday
         lblTemperature.text = "\(temperature)°C"
         windSpeedView.lbl.text = String(format: "%.0f", windSpeed)
-        humidityView.lbl.text = String(format: "%.0f", humidity)
+        humidityView.lbl.text = String(humidity)
         lblViewWeatherCondition.text = conditionText
+        let fullUrl = "https:" + conditionImgURLString
+        DispatchQueue.main.async {
+            self.imageViewWeatherCondition.imageFrom(fullUrl)
+        }
     }
     
     private func setupLblDay() {

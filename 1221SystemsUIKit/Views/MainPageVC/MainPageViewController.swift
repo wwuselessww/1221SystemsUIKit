@@ -20,7 +20,7 @@ class MainPageViewController: UIViewController {
             guard let day = itemIdentifier.day, let date = itemIdentifier.date else {
                 return ForecastCell()
             }
-            cell.configure(weekday: date.formattedToString("MMM d"), temperature: Int(day.maxtempC ?? 0),humidity:day.avghumidity ?? 0, windSpeed: day.maxwindKph ?? 0, conditionText: day.condition?.text ?? "heh")
+            cell.configure(weekday: date.formattedToString("MMM d"), temperature: Int(day.maxtempC ?? 0),humidity:day.avghumidity ?? 0, windSpeed: day.maxwindKph ?? 0, conditionText: day.condition?.text ?? "heh", conditionImgURLString: day.condition?.icon ?? "none")
             
             return cell
         }
