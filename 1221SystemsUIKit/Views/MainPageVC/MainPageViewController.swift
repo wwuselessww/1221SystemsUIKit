@@ -9,14 +9,16 @@ import UIKit
 
 class MainPageViewController: UIViewController {
     internal var vm = MainPageViewModel()
+    internal var tableHeightConstraint: NSLayoutConstraint?
     
     lazy var dataSource: UITableViewDiffableDataSource<Section, Weather> = {
         return .init(tableView: table) { [self] tableView, indexPath, itemIdentifier in
-            guard let cell = table.dequeueReusableCell(withIdentifier: "cell") else {
+            guard let cell = table.dequeueReusableCell(withIdentifier: ForecastCell.identifier) as? ForecastCell else {
                 print("***cant deque cell for table in mainPageVC")
-                return UITableViewCell()
+                return ForecastCell()
             }
-            cell.backgroundColor = .systemMint
+            cell.backgroundColor = .white
+            cell.configure(weekday: itemIdentifier.name, temperature: indexPath.row)
             return cell
         }
     }()
@@ -101,8 +103,7 @@ class MainPageViewController: UIViewController {
         setupSeparator()
         setupScrollLbl()
         setupTable()
-        
-        
+
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -128,8 +129,8 @@ class MainPageViewController: UIViewController {
     }
     
     private func setupWeatherInfo() {
-        windView.configure(systemImage: "wind", title: "10km.h")
-        humidityView.configure(systemImage: "humidity", title: "20%")
+        windView.configure(systemImage: "wind", title: "10km.h", color: .white)
+        humidityView.configure(systemImage: "humidity", title: "20%", color: .white)
         contentView.addSubview(hstack)
         hstack.translatesAutoresizingMaskIntoConstraints = false
         hstack.addArrangedSubview(windView)
@@ -211,11 +212,12 @@ class MainPageViewController: UIViewController {
     }
     
     private func setupScrollConstraints() {
-        let heightConstraint = contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 1.1)
+        
+        let heightConstraint = contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         heightConstraint.isActive = true
         heightConstraint.priority = UILayoutPriority(50)
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -227,5 +229,11 @@ class MainPageViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "contentSize", object as? UITableView === table {
+            tableHeightConstraint?.constant = table.contentSize.height
+            view.layoutIfNeeded()
+        }
+    }
 }
-
