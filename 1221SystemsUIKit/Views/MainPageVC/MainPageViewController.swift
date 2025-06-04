@@ -11,7 +11,7 @@ class MainPageViewController: UIViewController {
     internal var vm = MainPageViewModel()
     internal var tableHeightConstraint: NSLayoutConstraint?
     
-    lazy var dataSource: UITableViewDiffableDataSource<Section, Weather> = {
+    lazy var dataSource: UITableViewDiffableDataSource<Section, WeatherModel> = {
         return .init(tableView: table) { [self] tableView, indexPath, itemIdentifier in
             guard let cell = table.dequeueReusableCell(withIdentifier: ForecastCell.identifier) as? ForecastCell else {
                 print("***cant deque cell for table in mainPageVC")
@@ -94,8 +94,8 @@ class MainPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupScroll()
         setupBindings()
+        setupScroll()
         setupImgViewWeather()
         setupTemperatureLbl()
         setupWeatherText()
@@ -103,6 +103,7 @@ class MainPageViewController: UIViewController {
         setupSeparator()
         setupScrollLbl()
         setupTable()
+        vm.getWeather()
 
     }
     override func viewDidLayoutSubviews() {

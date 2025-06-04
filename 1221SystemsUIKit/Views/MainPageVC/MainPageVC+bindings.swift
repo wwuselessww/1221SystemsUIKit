@@ -8,8 +8,17 @@
 import Foundation
 extension MainPageViewController {
     func setupBindings() {
-        vm.$text.sink { [weak self] str in
+        vm.$weatherObject.sink { object in
+            Task { @MainActor in
+                await self.vm.populateWeatherText()
+                self.lblWeatherText.text = "Its Bloody \(self.vm.conditionString) In \(self.vm.cityName)"
+                self.lblTemperature.text = "\(self.vm.temreratureString)°C"
+                self.windView.lbl.text = "\(self.vm.windSpeedString)km/h"
+                self.humidityView.lbl.text = "\(self.vm.humidityString)%"
+                
+            }
         }
         .store(in: &vm.cancellables)
+
     }
 }

@@ -8,14 +8,14 @@
 import UIKit
 
 class WeatherDetailView: UIView {
-    private var imageView: UIImageView = {
+     var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.image = UIImage(systemName: "cloud.drizzle")
 //        imageView.tintColor = .white
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    private var lbl: UILabel = {
+     var lbl: UILabel = {
         var lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.font = UIFont.systemFont(ofSize: 20)
